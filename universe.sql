@@ -44,11 +44,23 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: asteriod; Type: TABLE; Schema: public; Owner: freecodecamp
+--
+
+CREATE TABLE public.asteriod (
+);
+
+
+ALTER TABLE public.asteriod OWNER TO freecodecamp;
+
+--
 -- Name: galaxy; Type: TABLE; Schema: public; Owner: freecodecamp
 --
 
 CREATE TABLE public.galaxy (
-    galaxy_id integer NOT NULL
+    galaxy_id integer NOT NULL,
+    name character varying(30),
+    name_meaning text
 );
 
 
@@ -81,7 +93,8 @@ ALTER SEQUENCE public.galaxy_galaxy_id_seq OWNED BY public.galaxy.galaxy_id;
 --
 
 CREATE TABLE public.moon (
-    moon_id integer NOT NULL
+    moon_id integer NOT NULL,
+    name character varying(30)
 );
 
 
@@ -114,7 +127,13 @@ ALTER SEQUENCE public.moon_moon_id_seq OWNED BY public.moon.moon_id;
 --
 
 CREATE TABLE public.planet (
-    planet_id integer NOT NULL
+    planet_id integer NOT NULL,
+    name character varying(30),
+    mass_relative_to_earth integer,
+    diameter_relative_to_earth integer,
+    distance_from_sun numeric,
+    terresterial boolean,
+    columnouter_planet boolean
 );
 
 
@@ -147,7 +166,9 @@ ALTER SEQUENCE public.planet_planet_id_seq OWNED BY public.planet.planet_id;
 --
 
 CREATE TABLE public.star (
-    star_id integer NOT NULL
+    star_id integer NOT NULL,
+    name character varying(30),
+    galaxy_id integer
 );
 
 
@@ -204,9 +225,17 @@ ALTER TABLE ONLY public.star ALTER COLUMN star_id SET DEFAULT nextval('public.st
 
 
 --
+-- Data for Name: asteriod; Type: TABLE DATA; Schema: public; Owner: freecodecamp
+--
+
+
+
+--
 -- Data for Name: galaxy; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
+INSERT INTO public.galaxy VALUES (1, 'Andromeda', 'In mythology, Andromeda is the daughter of the kings of Ethiopia and is said to be more beautiful than the Nereids. She becomes queen of Greece when she marries Perseus');
+INSERT INTO public.galaxy VALUES (2, 'Antennae Galaxy', 'This is a dual galaxy. It gets its name because it is said to look like a pair of insect antennae');
 
 
 --
@@ -256,6 +285,14 @@ SELECT pg_catalog.setval('public.star_star_id_seq', 1, false);
 
 
 --
+-- Name: galaxy galaxy_galaxy_id_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.galaxy
+    ADD CONSTRAINT galaxy_galaxy_id_key UNIQUE (galaxy_id);
+
+
+--
 -- Name: galaxy galaxy_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
@@ -285,6 +322,14 @@ ALTER TABLE ONLY public.planet
 
 ALTER TABLE ONLY public.star
     ADD CONSTRAINT star_pkey PRIMARY KEY (star_id);
+
+
+--
+-- Name: star star_galaxy_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.star
+    ADD CONSTRAINT star_galaxy_id_fkey FOREIGN KEY (galaxy_id) REFERENCES public.galaxy(galaxy_id);
 
 
 --
