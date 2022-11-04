@@ -337,6 +337,8 @@ INSERT INTO public.star VALUES (1, 'Sun', 6, true, 1);
 INSERT INTO public.star VALUES (2, 'Ross 248', 1, false, 0.136);
 INSERT INTO public.star VALUES (3, 'GX Andromedae', 1, false, 0.38);
 INSERT INTO public.star VALUES (4, 'GQ Andromedae', 1, false, 0.15);
+INSERT INTO public.star VALUES (36, 'Proxima Centauri', 5, false, 0.122);
+INSERT INTO public.star VALUES (37, 'Rigil Kentaurus', 5, true, 1.079);
 
 
 --
@@ -371,7 +373,7 @@ SELECT pg_catalog.setval('public.planet_planet_id_seq', 1, false);
 -- Name: star_star_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
-SELECT pg_catalog.setval('public.star_star_id_seq', 35, true);
+SELECT pg_catalog.setval('public.star_star_id_seq', 37, true);
 
 
 --
