@@ -49,7 +49,7 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.asteriod (
     asteriod_id integer NOT NULL,
-    name character varying(30)
+    name character varying(30) NOT NULL
 );
 
 
@@ -120,7 +120,7 @@ ALTER SEQUENCE public.galaxy_galaxy_id_seq OWNED BY public.galaxy.galaxy_id;
 
 CREATE TABLE public.moon (
     moon_id integer NOT NULL,
-    name character varying(30),
+    name character varying(30) NOT NULL,
     planet_id integer
 );
 
@@ -155,9 +155,9 @@ ALTER SEQUENCE public.moon_moon_id_seq OWNED BY public.moon.moon_id;
 
 CREATE TABLE public.planet (
     planet_id integer NOT NULL,
-    name character varying(30),
-    mass_relative_to_earth integer,
-    diameter_relative_to_earth integer,
+    name character varying(30) NOT NULL,
+    mass_relative_to_earth numeric,
+    diameter_relative_to_earth numeric,
     distance_from_sun numeric,
     terresterial boolean,
     columnouter_planet boolean
@@ -194,7 +194,7 @@ ALTER SEQUENCE public.planet_planet_id_seq OWNED BY public.planet.planet_id;
 
 CREATE TABLE public.star (
     star_id integer NOT NULL,
-    name character varying(30),
+    name character varying(30) NOT NULL,
     galaxy_id integer
 );
 
@@ -283,6 +283,18 @@ INSERT INTO public.galaxy VALUES (3, 'Backward Galaxy', 'It seems to rotate in t
 -- Data for Name: planet; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
+INSERT INTO public.planet VALUES (1, 'Mercury', 0, 0, 0.39, true, false);
+INSERT INTO public.planet VALUES (2, 'Venus', 1, 1, 0.72, true, false);
+INSERT INTO public.planet VALUES (3, 'Earth', 1, 1, 1, true, false);
+INSERT INTO public.planet VALUES (4, 'Mars', 0.11, 0.53, 1.52, true, false);
+INSERT INTO public.planet VALUES (5, 'Jupiter', 317.89, 11.19, 5.20, false, true);
+INSERT INTO public.planet VALUES (6, 'Saturn', 95.15, 9.44, 9.54, false, true);
+INSERT INTO public.planet VALUES (7, 'Uranus', 14.54, 4.10, 19.2, false, true);
+INSERT INTO public.planet VALUES (8, 'Neptune', 17.23, 3.88, 30.06, false, true);
+INSERT INTO public.planet VALUES (9, 'Ceres', 0.00016, 0.076, 2.76596, false, false);
+INSERT INTO public.planet VALUES (10, 'Pluto', 0.0022, 0.186, 39.44, false, true);
+INSERT INTO public.planet VALUES (11, 'Haumea', 0.0007, 0.13, 43.335, false, true);
+INSERT INTO public.planet VALUES (12, 'Quaoar', 0.0003, 0.087, 5.20, false, true);
 
 
 --
