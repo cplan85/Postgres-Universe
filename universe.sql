@@ -49,7 +49,9 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.asteriod (
     asteriod_id integer NOT NULL,
-    name character varying(30) NOT NULL
+    name character varying(30) NOT NULL,
+    discovery_year integer,
+    diameter integer
 );
 
 
@@ -121,7 +123,9 @@ ALTER SEQUENCE public.galaxy_galaxy_id_seq OWNED BY public.galaxy.galaxy_id;
 CREATE TABLE public.moon (
     moon_id integer NOT NULL,
     name character varying(30) NOT NULL,
-    planet_id integer
+    planet_id integer,
+    diameter_in_km integer,
+    year_discovered integer
 );
 
 
@@ -195,7 +199,9 @@ ALTER SEQUENCE public.planet_planet_id_seq OWNED BY public.planet.planet_id;
 CREATE TABLE public.star (
     star_id integer NOT NULL,
     name character varying(30) NOT NULL,
-    galaxy_id integer
+    galaxy_id integer,
+    bright_star boolean,
+    mass_relative_to_sun numeric
 );
 
 
@@ -262,6 +268,9 @@ ALTER TABLE ONLY public.star ALTER COLUMN star_id SET DEFAULT nextval('public.st
 -- Data for Name: asteriod; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
+INSERT INTO public.asteriod VALUES (1, 'Amphitrite', 1854, NULL);
+INSERT INTO public.asteriod VALUES (2, 'Camilla', 1868, 236);
+INSERT INTO public.asteriod VALUES (3, 'Chiron', 1977, 180);
 
 
 --
@@ -271,12 +280,35 @@ ALTER TABLE ONLY public.star ALTER COLUMN star_id SET DEFAULT nextval('public.st
 INSERT INTO public.galaxy VALUES (2, 'Antennae Galaxy', 'This is a dual galaxy. It gets its name because it is said to look like a pair of insect antennae', NULL, false);
 INSERT INTO public.galaxy VALUES (1, 'Andromeda', 'In mythology, Andromeda is the daughter of the kings of Ethiopia and is said to be more beautiful than the Nereids. She becomes queen of Greece when she marries Perseus', 'Andromeda', true);
 INSERT INTO public.galaxy VALUES (3, 'Backward Galaxy', 'It seems to rotate in the opposite direction to what it should according to its shape.', 'Centaurus', false);
+INSERT INTO public.galaxy VALUES (4, 'Black Eye Galaxy', 'It looks like an eye with a dark stripe underneath.', 'Coma Berenices', false);
+INSERT INTO public.galaxy VALUES (5, 'Centaurus A', 'Named because it’s located in the Centaurus constellation', 'Centaurus', true);
+INSERT INTO public.galaxy VALUES (6, 'Milky Way', 'Our own galaxy. It is said to look like a band of light', 'Sagittarius', true);
 
 
 --
 -- Data for Name: moon; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
+INSERT INTO public.moon VALUES (1, 'moon', 3, 3476, NULL);
+INSERT INTO public.moon VALUES (2, 'Deimos', 4, 8, 1877);
+INSERT INTO public.moon VALUES (3, 'Phobos', 4, 560, 1877);
+INSERT INTO public.moon VALUES (4, 'Adrastea', 5, 416, 1979);
+INSERT INTO public.moon VALUES (5, 'Aitne', 5, 3, 2001);
+INSERT INTO public.moon VALUES (6, 'Ananke', 5, 20, 1951);
+INSERT INTO public.moon VALUES (7, 'Aoede', 5, 4, 2003);
+INSERT INTO public.moon VALUES (8, 'Callisto', 5, 4800, 1610);
+INSERT INTO public.moon VALUES (9, 'Carme', 5, 30, 1938);
+INSERT INTO public.moon VALUES (10, 'Aegir', 6, 6, 2005);
+INSERT INTO public.moon VALUES (11, 'Albiorix', 6, 30, 2000);
+INSERT INTO public.moon VALUES (12, 'Anthe', 6, 1, 2004);
+INSERT INTO public.moon VALUES (13, 'Atlas', 6, 999, 1980);
+INSERT INTO public.moon VALUES (14, 'Bebhionn', 6, 6, 2005);
+INSERT INTO public.moon VALUES (15, 'Ariel', 7, 1160, 1851);
+INSERT INTO public.moon VALUES (16, 'Belinda', 7, 66, 1986);
+INSERT INTO public.moon VALUES (17, 'Caliban', 7, 80, 1997);
+INSERT INTO public.moon VALUES (18, 'Despina', 8, 160, 1989);
+INSERT INTO public.moon VALUES (19, 'Galatea', 8, 140, 1989);
+INSERT INTO public.moon VALUES (20, 'Charon', 10, 1207, 1978);
 
 
 --
@@ -301,13 +333,17 @@ INSERT INTO public.planet VALUES (12, 'Quaoar', 0.0003, 0.087, 5.20, false, true
 -- Data for Name: star; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
+INSERT INTO public.star VALUES (1, 'Sun', 6, true, 1);
+INSERT INTO public.star VALUES (2, 'Ross 248', 1, false, 0.136);
+INSERT INTO public.star VALUES (3, 'GX Andromedae', 1, false, 0.38);
+INSERT INTO public.star VALUES (4, 'GQ Andromedae', 1, false, 0.15);
 
 
 --
 -- Name: asteriod_asteriod_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
-SELECT pg_catalog.setval('public.asteriod_asteriod_id_seq', 1, false);
+SELECT pg_catalog.setval('public.asteriod_asteriod_id_seq', 3, true);
 
 
 --
@@ -321,7 +357,7 @@ SELECT pg_catalog.setval('public.galaxy_galaxy_id_seq', 1, true);
 -- Name: moon_moon_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
-SELECT pg_catalog.setval('public.moon_moon_id_seq', 1, false);
+SELECT pg_catalog.setval('public.moon_moon_id_seq', 20, true);
 
 
 --
@@ -335,7 +371,15 @@ SELECT pg_catalog.setval('public.planet_planet_id_seq', 1, false);
 -- Name: star_star_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
-SELECT pg_catalog.setval('public.star_star_id_seq', 1, false);
+SELECT pg_catalog.setval('public.star_star_id_seq', 35, true);
+
+
+--
+-- Name: asteriod asteriod_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.asteriod
+    ADD CONSTRAINT asteriod_name_key UNIQUE (name);
 
 
 --
@@ -355,11 +399,27 @@ ALTER TABLE ONLY public.galaxy
 
 
 --
+-- Name: galaxy galaxy_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.galaxy
+    ADD CONSTRAINT galaxy_name_key UNIQUE (name);
+
+
+--
 -- Name: galaxy galaxy_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
 ALTER TABLE ONLY public.galaxy
     ADD CONSTRAINT galaxy_pkey PRIMARY KEY (galaxy_id);
+
+
+--
+-- Name: moon moon_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.moon
+    ADD CONSTRAINT moon_name_key UNIQUE (name);
 
 
 --
@@ -384,6 +444,14 @@ ALTER TABLE ONLY public.planet
 
 ALTER TABLE ONLY public.planet
     ADD CONSTRAINT planet_pkey PRIMARY KEY (planet_id);
+
+
+--
+-- Name: star star_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.star
+    ADD CONSTRAINT star_name_key UNIQUE (name);
 
 
 --
